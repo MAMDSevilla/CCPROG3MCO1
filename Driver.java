@@ -1,5 +1,6 @@
 public class Driver{
   public static void main(String[] args){
-    System.out.println("ANN MARIE");
+    Supermarket sm = new Supermarket();
+    sm.displaySupermarket();
   }
 }
