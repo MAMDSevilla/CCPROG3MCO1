@@ -1,82 +1,48 @@
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-  Represents a product display in the supermarket
-  Displays can be different types (Table, Shelf, Fridge, Chilled) and holds products
-*/
+public abstract class Display {
+    private final String address;
+    private final List<List<Product>> tiers = new ArrayList<>();
 
-public class Display {
-  private String id;
-  private String type;
-  private int capacity;
-  private List<Product> products;
-
-  /*
-    Constructs the Display object with the given parameters.
-    @param id        - unique identifier of the display
-    @param type      - display type
-    @param capacity  - number of products this display can hold
-  */
-  public Display(String id, String type, int capacity){
-    this.id = id;
-    this.type = type;
-    this.capacity = capacity;
-    this.products = new ArrayList<>();
-  }
-
-  // Adds a product to the display if capacity allows
-  public boolean addProduct(Product p){
-    if(products.size() < capacity){
-      products.add(p);
-      return true;
+    public Display(String address) {
+        this.address = address;
+        int n = getDisplayType().getNumTiers();
+        for (int i = 0; i < n; i++) {
+            tiers.add(new ArrayList<>(getDisplayType().getCapacityPerTier()));
+        }
     }
-    return false;
-  }
 
-  // Removes products by serial code
-  public Product removeProduct(String Serial){
-    for (Product p : products){
-      if(p.getserial().equals(serial)){
-        product.remove(p);
-        return p;
-      }
+    public abstract DisplayType getDisplayType();
+
+    public boolean isFull() {
+        return tiers.stream().allMatch(t -> t.size() >= getDisplayType().getCapacityPerTier());
     }
-    return null;
-  }
 
-  // Returns all product to display
-  public List<Product> listProducts(){
-    return products;
-  }
+    public boolean addProduct(Product p, int tierIdx) {
+        if (!p.getType().getDisplayType().equals(getDisplayType())) return false;
+        if (tierIdx < 0 || tierIdx >= tiers.size()) return false;
+        List<Product> tier = tiers.get(tierIdx);
+        if (tier.size() >= getDisplayType().getCapacityPerTier()) return false;
+        tier.add(p);
+        return true;
+    }
 
-  // Returns display detials into string
-  public String toString(){
-    return "Display " + id + " [" + type + "] (" + products.size() + "/" + capacity + " products)";
-  }
+    public Product removeProduct(String serial, int tierIdx) {
+        if (tierIdx < 0 || tierIdx >= tiers.size()) return null;
+        List<Product> tier = tiers.get(tierIdx);
+        return tier.removeIf(pr -> pr.getSerialCode().equals(serial)) ? tier.stream()
+                .filter(pr -> pr.getSerialCode().equals(serial)).findFirst().orElse(null) : null;
+    }
 
-  // Getters
-  public String getId(){
-    return id;
-  }
-  
-  public String getType(){
-    return type;
-  }
-  
-  public int getCapacity(){
-    return capacity;
-  }
+    public List<Product> getAllProducts() {
+        return tiers.stream().flatMap(List::stream).toList();
+    }
+
+    public boolean containsProduct(String name) {
+        return getAllProducts().stream().anyMatch(p -> p.getName().equalsIgnoreCase(name));
+    }
+
+    public String getAddress() { return address; }
+    public List<List<Product>> getTiers() { return tiers; }
 }
-
-
-
-
-
-
-
-
-
-
-
-
