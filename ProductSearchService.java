@@ -4,9 +4,8 @@ import java.util.Scanner;
 public class ProductSearchService extends Service {
     @Override
     public void interact(Shopper shopper, Map map) {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter product name: ");
-        String name = scanner.nextLine();
+        String name = map.getScanner().nextLine();
         List<String> addresses = map.searchProductAddresses(name);
         if (addresses.isEmpty()) {
             System.out.println("No displays with that product.");
@@ -16,6 +15,5 @@ public class ProductSearchService extends Service {
                 System.out.println(addr);
             }
         }
-        scanner.close();
     }
 }

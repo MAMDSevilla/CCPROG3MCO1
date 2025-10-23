@@ -137,13 +137,17 @@ public class Map {
     public void spawnShopper(Shopper s) { shopper = s; shopper.setPosition(21, 0); }
 
     public void printMap() {
+        //System.out.println();
+        Display.nineDashline();
         System.out.println("\nLegend:");
         System.out.println("# - Wall            | T - Table         | R - Refrigerator  | S - Shelf     | C - Chilled Counter");
         System.out.println("E - Entrance        | X - Exit          | G - Cart Station  | B - Basket Station");
         System.out.println("I - Product Search  | $ - Checkout      | . - Empty | ^ v > < - Shopper facing");
-        System.out.println("Position: (" + shopper.getRow() + ", " + shopper.getCol() + ") Facing: " + shopper.getFacing());
-        System.out.println("Current Total: ₱" + shopper.getTotalPrice());
         System.out.println();
+        System.out.println("Position: (" + shopper.getRow() + ", " + shopper.getCol() + ") Facing: " + shopper.getFacing());
+        System.out.println("Current Total: Php " + String.format("%.2f", shopper.getTotalPrice()));
+        System.out.println();
+        
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) {
                 if (r == shopper.getRow() && c == shopper.getCol()) System.out.print("[" + switch (shopper.getFacing()) {
@@ -204,18 +208,24 @@ public class Map {
                 continue;
             }
             if (choice == 1) {
+                if (!shopper.hasEquipment() && shopper.getChosenProducts().size() >= 2) {
+                    System.out.println("Your hand is full. You can only return items or checkout.");
+                    continue;
+                }
                 for (int tier = 0; tier < d.getDisplayType().getNumTiers(); tier++) {
+                    System.out.println();
                     System.out.println("Tier " + tier + ":");
                     List<Product> tierProducts = d.getTiers().get(tier);
                     if (tierProducts.isEmpty()) {
                         System.out.println("Empty");
                     } else {
-                        for (Product p : tierProducts) System.out.println(p.getSerialCode() + " " + p.getName() + " ₱" + p.getPrice());
+                        for (Product p : tierProducts) System.out.println(p.getSerialCode() + " " + p.getName() + " Php " + String.format("%.2f", p.getPrice()));
                     }
                 }
                 int tier = 0;
                 if (d.getDisplayType().getNumTiers() > 1) {
                     while (true) {
+                        System.out.println();
                         System.out.print("Enter tier: ");
                         String tierStr = scanner.nextLine().trim();
                         try {
@@ -268,7 +278,7 @@ public class Map {
                     System.out.println("None.");
                     return;
                 }
-                for (Product p : prods) System.out.println(p.getSerialCode() + " " + p.getName() + " ₱" + p.getPrice());
+                for (Product p : prods) System.out.println(p.getSerialCode() + " " + p.getName() + " Php " + String.format("%.2f", p.getPrice()));
                 while (true) {
                     System.out.print("Enter serial code: ");
                     String serial = scanner.nextLine().trim();
@@ -314,13 +324,14 @@ public class Map {
     }
 
     public void viewChosen() {
-        System.out.println(shopper.hasEquipment() ? shopper.getEquipment().getClass().getSimpleName() : "Hand");
+        System.out.println();
+        System.out.println(shopper.hasEquipment() ? shopper.getEquipment().getClass().getSimpleName() : "Hand Carrying: ");
         List<Product> prods = shopper.getChosenProducts();
         if (prods.isEmpty()) { System.out.println("Empty."); return; }
         java.util.Map<String, Integer> qty = new HashMap<>();
         java.util.Map<String, Double> price = new HashMap<>();
         for (Product p : prods) { qty.merge(p.getName(), 1, Integer::sum); price.put(p.getName(), p.getPrice()); }
-        for (String n : qty.keySet()) System.out.println(n + " x" + qty.get(n) + " = ₱" + (price.get(n) * qty.get(n)));
+        for (String n : qty.keySet()) System.out.println(n + " x" + qty.get(n) + " = Php " + String.format("%.2f", price.get(n) * qty.get(n)));
     }
 
     public List<String> searchProductAddresses(String name) {
@@ -335,4 +346,5 @@ public class Map {
 
     public boolean isRunning() { return running; }
     public void setRunning(boolean r) { running = r; }
+    public Scanner getScanner() { return scanner; }
 }

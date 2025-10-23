@@ -31,10 +31,18 @@ public class Driver {
             map.spawnShopper(shopper);
             while (map.isRunning()) {
                 map.printMap();
-                System.out.println("Command (w a s d move, i j k l face, space interact, v view, q quit): ");
+                System.out.println();
+                System.out.println("Command (move: w a s d; face: i j k l; space interact; view: v; quit: q): ");
+                System.out.print("Choose your Action: ");
                 String command = scanner.nextLine();
-                if (command.isEmpty()) continue;
+                if (command.isEmpty()) {
+                    System.out.println("You entered nothing. Please enter a command.");
+                    continue;
+                }
+
+                command = command.toLowerCase();
                 char ch = command.charAt(0);
+
                 switch (ch) {
                     case 'w': map.moveShopper(Direction.NORTH); break;
                     case 's': map.moveShopper(Direction.SOUTH); break;
@@ -47,6 +55,7 @@ public class Driver {
                     case ' ': map.interactFront(); break;
                     case 'v': map.viewChosen(); break;
                     case 'q': map.setRunning(false); break;
+                    default: System.out.println("Invalid Action!");
                 }
             }
             System.out.println("Restart? y/n");

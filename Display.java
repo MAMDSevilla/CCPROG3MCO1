@@ -49,4 +49,8 @@ public abstract class Display {
 
     public String getAddress() { return address; }
     public List<List<Product>> getTiers() { return tiers; }
+
+    public static void nineDashline() {
+        System.out.println("\n===============================================================");
+    }
 }
