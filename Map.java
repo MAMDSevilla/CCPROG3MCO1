@@ -20,35 +20,31 @@ public class Map {
     }
 
     private void initializeProductData() {
-        productNames.put(ProductType.FRUIT, new String[]{"Apples", "Oranges", "Grapes"});
-        productNames.put(ProductType.VEGETABLE, new String[]{"Cabbage", "Lettuce", "Broccoli"});
-        productNames.put(ProductType.MILK, new String[]{"Fresh Milk", "Soy Milk", "Almond Milk"});
-        productNames.put(ProductType.FROZEN_FOOD, new String[]{"Hotdog", "Chicken Nuggets", "Tocino"});
-        productNames.put(ProductType.CHEESE, new String[]{"Sliced Cheese", "Keso de Bola", "Mozzarella"});
-        productNames.put(ProductType.BREAD, new String[]{"Baguette", "Croissant", "Bagel"});
-        productNames.put(ProductType.CLEANING_AGENTS, new String[]{"Detergent", "Bleach", "Dish Soap"});
-        productNames.put(ProductType.HOME_ESSENTIALS, new String[]{"Broom", "Mop", "Plunger"});
-        productNames.put(ProductType.HAIR_CARE, new String[]{"Shampoo", "Conditioner", "Hair Wax"});
-        productNames.put(ProductType.BODY_CARE, new String[]{"Soap", "Body Wash", "Shower Gel"});
-        productNames.put(ProductType.DENTAL_CARE, new String[]{"Toothpaste", "Toothbrush", "Dental Floss"});
-        productNames.put(ProductType.CLOTHES, new String[]{"Shirt", "Shorts", "Pants"});
-        productNames.put(ProductType.STATIONERY, new String[]{"Paper", "Tape", "Pencil"});
-        productNames.put(ProductType.PET_FOOD, new String[]{"Cat Food", "Dog Food", "Bird Seed"});
+        productNames.put(ProductType.CHICKEN, new String[]{"Thigh fillet", "Breast fillet", "Ground", "Wings", "Drumsticks"});
+        productNames.put(ProductType.BEEF, new String[]{"Rib", "Shank", "Ground", "Sirloin", "Brisket"});
+        productNames.put(ProductType.SEAFOOD, new String[]{"Tilapia", "Sugpo", "Squid", "Salmon", "Tuna"});
+        productNames.put(ProductType.ALCOHOL, new String[]{"Beer", "Vodka", "Soju", "Whiskey", "Wine"});
+        productNames.put(ProductType.SOFT_DRINK, new String[]{"Cola", "Soda", "Sparkling water", "Lemonade", "Iced tea"});
+        productNames.put(ProductType.FRUIT, new String[]{"Apple", "Orange", "Grapes", "Banana", "Mango"});
+        productNames.put(ProductType.CEREAL, new String[]{"Oatmeal", "Barley", "Quinoa", "Cornflakes", "Rice puffs"});
+        productNames.put(ProductType.CANNED_GOODS, new String[]{"Tuna", "Sardines", "Soup", "Beans", "Corn"});
+        productNames.put(ProductType.CONDIMENTS, new String[]{"Salt", "Pepper", "Paprika", "Soy sauce", "Vinegar"});
+        productNames.put(ProductType.JUICE, new String[]{"Orange", "Pineapple", "Apple", "Grape", "Mango"});
+        productNames.put(ProductType.NOODLES, new String[]{"Ramen", "Miswa", "Instant noodles", "Udon", "Soba"});
+        productNames.put(ProductType.SNACKS, new String[]{"Candies", "Cookies", "Junk food", "Chips", "Popcorn"});
 
+        priceRanges.put(ProductType.CHICKEN, new double[]{100, 250});
+        priceRanges.put(ProductType.BEEF, new double[]{200, 500});
+        priceRanges.put(ProductType.SEAFOOD, new double[]{150, 400});
+        priceRanges.put(ProductType.ALCOHOL, new double[]{50, 200});
+        priceRanges.put(ProductType.SOFT_DRINK, new double[]{20, 50});
         priceRanges.put(ProductType.FRUIT, new double[]{15, 70});
-        priceRanges.put(ProductType.VEGETABLE, new double[]{15, 70});
-        priceRanges.put(ProductType.MILK, new double[]{50, 120});
-        priceRanges.put(ProductType.FROZEN_FOOD, new double[]{80, 200});
-        priceRanges.put(ProductType.CHEESE, new double[]{100, 300});
-        priceRanges.put(ProductType.BREAD, new double[]{30, 100});
-        priceRanges.put(ProductType.CLEANING_AGENTS, new double[]{50, 200});
-        priceRanges.put(ProductType.HOME_ESSENTIALS, new double[]{100, 500});
-        priceRanges.put(ProductType.HAIR_CARE, new double[]{80, 300});
-        priceRanges.put(ProductType.BODY_CARE, new double[]{60, 250});
-        priceRanges.put(ProductType.DENTAL_CARE, new double[]{40, 150});
-        priceRanges.put(ProductType.CLOTHES, new double[]{200, 1000});
-        priceRanges.put(ProductType.STATIONERY, new double[]{10, 100});
-        priceRanges.put(ProductType.PET_FOOD, new double[]{100, 400});
+        priceRanges.put(ProductType.CEREAL, new double[]{50, 150});
+        priceRanges.put(ProductType.CANNED_GOODS, new double[]{30, 100});
+        priceRanges.put(ProductType.CONDIMENTS, new double[]{10, 50});
+        priceRanges.put(ProductType.JUICE, new double[]{25, 60});
+        priceRanges.put(ProductType.NOODLES, new double[]{15, 40});
+        priceRanges.put(ProductType.SNACKS, new double[]{5, 30});
     }
 
     private void initializeMap() {
@@ -57,32 +53,33 @@ public class Map {
         for (int c = 0; c < COLS; c++) { tiles[0][c] = new Tile(Tile.Type.WALL, null); tiles[ROWS-1][c] = new Tile(Tile.Type.WALL, null); }
         for (int r = 0; r < ROWS; r++) { tiles[r][0] = new Tile(Tile.Type.WALL, null); tiles[r][COLS-1] = new Tile(Tile.Type.WALL, null); }
 
-        tiles[21][0] = new Tile(Tile.Type.SERVICE, new EntranceService());
-        tiles[21][1] = new Tile(Tile.Type.SERVICE, new ExitService());
-        tiles[20][0] = new Tile(Tile.Type.SERVICE, new BasketStation());
-        tiles[20][1] = new Tile(Tile.Type.SERVICE, new CartStation());
-        tiles[15][15] = new Tile(Tile.Type.SERVICE, new ProductSearchService());
-        tiles[15][16] = new Tile(Tile.Type.SERVICE, new ProductSearchService());
+        tiles[21][11] = new Tile(Tile.Type.SERVICE, new EntranceService());
+        tiles[21][10] = new Tile(Tile.Type.SERVICE, new ExitService());
+        tiles[20][1] = new Tile(Tile.Type.SERVICE, new BasketStation());
+        tiles[20][20] = new Tile(Tile.Type.SERVICE, new CartStation());
+        tiles[15][8] = new Tile(Tile.Type.SERVICE, new ProductSearchService());
+        tiles[15][13] = new Tile(Tile.Type.SERVICE, new ProductSearchService());
 
         for (int c = 0; c < 8; c++) tiles[18][c] = new Tile(Tile.Type.SERVICE, new CheckoutService());
 
-        createShelfRow(4, 7, 5, "GF, Aisle 1, Shelf ", ProductType.CLEANING_AGENTS);
-        createShelfRow(4, 7, 7, "GF, Aisle 1, Shelf ", ProductType.HOME_ESSENTIALS);
+        // Tables for MCO1
+        createTableRow(4, 7, 17, "GF, Aisle 3, Table 1 ", ProductType.FRUIT);
+        createTableRow(4, 7, 19, "GF, Aisle 3, Table 2 ", ProductType.CEREAL);
+        createTableRow(4, 7, 21, "GF, Aisle 3, Table 3 ", ProductType.NOODLES);
 
-        createTableRow(4, 7, 17, "GF, Aisle 3, Table ", ProductType.FRUIT);
-        createTableRow(4, 7, 19, "GF, Aisle 3, Table ", ProductType.VEGETABLE);
-        createTableRow(4, 7, 21, "GF, Aisle 3, Table ", ProductType.BREAD);
+        // Shelves for MCO1
+        createShelfRow(4, 7, 5, "GF, Aisle 1, Shelf ", ProductType.ALCOHOL);
+        createShelfRow(9, 12, 7, "GF, Aisle 5, Shelf ", ProductType.CANNED_GOODS);
 
-        createShelfRow(9, 12, 7, "GF, Aisle 5, Shelf ", ProductType.HAIR_CARE);
-        createShelfRow(9, 12, 9, "GF, Aisle 5, Shelf ", ProductType.BODY_CARE);
-        createShelfRow(9, 12, 11, "GF, Aisle 5, Shelf ", ProductType.DENTAL_CARE);
-        createShelfRow(9, 12, 13, "GF, Aisle 5, Shelf ", ProductType.CLOTHES);
-        createShelfRow(9, 12, 15, "GF, Aisle 5, Shelf ", ProductType.STATIONERY);
-        createShelfRow(9, 12, 17, "GF, Aisle 5, Shelf ", ProductType.PET_FOOD);
+        // New shelves for condiments in rows 2-3, columns 10-13
+        for (int r = 3; r <= 4; r++) {
+            for (int c = 10; c <= 13; c++) {
+                tiles[r][c] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Aisle 4, Shelf " + (c - 9)));
+            }
+        }
 
-        createRefrigeratorRow(14, 16, 1, "GF, Wall 1, Refrigerator ", ProductType.MILK);
-        createRefrigeratorRow(14, 16, 4, "GF, Wall 1, Refrigerator ", ProductType.FROZEN_FOOD);
-        createRefrigeratorRow(14, 16, 7, "GF, Wall 1, Refrigerator ", ProductType.CHEESE);
+        // Chilled Counters for MCO1
+        createChilledCounterRow(14, 16, 1, "GF, Wall 1, Chilled Counter ", ProductType.CHICKEN);
     }
 
     private void createShelfRow(int start, int end, int col, String base, ProductType type) {
@@ -93,6 +90,9 @@ public class Map {
     }
     private void createRefrigeratorRow(int start, int end, int col, String base, ProductType type) {
         for (int r = start, i = 1; r <= end; r++, i++) tiles[r][col] = new Tile(Tile.Type.DISPLAY, new Refrigerator(base + i));
+    }
+    private void createChilledCounterRow(int start, int end, int col, String base, ProductType type) {
+        for (int r = start, i = 1; r <= end; r++, i++) tiles[r][col] = new Tile(Tile.Type.DISPLAY, new ChilledCounter(base + i));
     }
 
     private void stockDisplays() {
@@ -118,19 +118,14 @@ public class Map {
 
     private ProductType getProductTypeForAddress(String address) {
         if (address.contains("Table 1")) return ProductType.FRUIT;
-        if (address.contains("Table 2")) return ProductType.VEGETABLE;
-        if (address.contains("Table 3")) return ProductType.BREAD;
-        if (address.contains("Shelf 3")) return ProductType.CLEANING_AGENTS;
-        if (address.contains("Shelf 4")) return ProductType.HOME_ESSENTIALS;
-        if (address.contains("Shelf 1")) return ProductType.HAIR_CARE;
-        if (address.contains("Shelf 2")) return ProductType.BODY_CARE;
-        if (address.contains("Shelf 3")) return ProductType.DENTAL_CARE;
-        if (address.contains("Shelf 4")) return ProductType.CLOTHES;
-        if (address.contains("Shelf 5")) return ProductType.STATIONERY;
-        if (address.contains("Shelf 6")) return ProductType.PET_FOOD;
-        if (address.contains("Refrigerator 1")) return ProductType.MILK;
-        if (address.contains("Refrigerator 2")) return ProductType.FROZEN_FOOD;
-        if (address.contains("Refrigerator 3")) return ProductType.CHEESE;
+        if (address.contains("Table 2")) return ProductType.CEREAL;
+        if (address.contains("Table 3")) return ProductType.NOODLES;
+        if (address.contains("Aisle 1") && address.contains("Shelf ")) return ProductType.ALCOHOL;
+        if (address.contains("Aisle 5") && address.contains("Shelf ")) return ProductType.CANNED_GOODS;
+        if (address.contains("Aisle 4") && address.contains("Shelf ")) return ProductType.CONDIMENTS;
+        if (address.contains("Chilled Counter 1")) return ProductType.CHICKEN;
+        if (address.contains("Chilled Counter 2")) return ProductType.BEEF;
+        if (address.contains("Chilled Counter 3")) return ProductType.SEAFOOD;
         return null;
     }
 
@@ -147,33 +142,53 @@ public class Map {
         System.out.println("Position: (" + shopper.getRow() + ", " + shopper.getCol() + ") Facing: " + shopper.getFacing());
         System.out.println("Current Total: Php " + String.format("%.2f", shopper.getTotalPrice()));
         System.out.println();
-        
+
+        // Print column numbers
+        System.out.print("   ");
+        for (int c = 0; c < COLS; c++) {
+            System.out.printf("%4d", c);
+        }
+        System.out.println();
+
         for (int r = 0; r < ROWS; r++) {
+            // Print row number
+            System.out.printf("%4d", r);
             for (int c = 0; c < COLS; c++) {
-                if (r == shopper.getRow() && c == shopper.getCol()) System.out.print("[" + switch (shopper.getFacing()) {
-                    case NORTH -> '^'; case SOUTH -> 'v'; case EAST -> '>'; case WEST -> '<';
-                } + "] ");
-                else {
+                String cell;
+                if (r == shopper.getRow() && c == shopper.getCol()) {
+                    char facingSym;
+                    if (shopper.getFacing() == Direction.NORTH) facingSym = '^';
+                    else if (shopper.getFacing() == Direction.SOUTH) facingSym = 'v';
+                    else if (shopper.getFacing() == Direction.EAST) facingSym = '>';
+                    else facingSym = '<';
+                    cell = String.format("[%c]", facingSym);
+                } else {
                     Tile t = tiles[r][c];
-                    char sym = switch (t.getType()) {
-                        case WALL -> '#';
-                        case DISPLAY -> switch (((Display) t.getAmenity()).getDisplayType()) {
-                            case TABLE -> 'T'; case REFRIGERATOR -> 'R'; case SHELF -> 'S'; case CHILLED_COUNTER -> 'C';
-                        };
-                        case SERVICE -> {
-                            Object srv = t.getAmenity();
-                            if (srv instanceof EntranceService) yield 'E';
-                            else if (srv instanceof ExitService) yield 'X';
-                            else if (srv instanceof CartStation) yield 'G';
-                            else if (srv instanceof BasketStation) yield 'B';
-                            else if (srv instanceof ProductSearchService) yield 'I';
-                            else if (srv instanceof CheckoutService) yield '$';
-                            else yield '.';
-                        }
-                        default -> '.';
-                    };
-                    System.out.print("[" + sym + "] ");
+                    char sym;
+                    if (t.getType() == Tile.Type.WALL) {
+                        sym = '#';
+                    } else if (t.getType() == Tile.Type.DISPLAY) {
+                        DisplayType dt = ((Display) t.getAmenity()).getDisplayType();
+                        if (dt == DisplayType.TABLE) sym = 'T';
+                        else if (dt == DisplayType.REFRIGERATOR) sym = 'R';
+                        else if (dt == DisplayType.SHELF) sym = 'S';
+                        else if (dt == DisplayType.CHILLED_COUNTER) sym = 'C';
+                        else sym = '?';
+                    } else if (t.getType() == Tile.Type.SERVICE) {
+                        Object srv = t.getAmenity();
+                        if (srv instanceof EntranceService) sym = 'E';
+                        else if (srv instanceof ExitService) sym = 'X';
+                        else if (srv instanceof CartStation) sym = 'G';
+                        else if (srv instanceof BasketStation) sym = 'B';
+                        else if (srv instanceof ProductSearchService) sym = 'I';
+                        else if (srv instanceof CheckoutService) sym = '$';
+                        else sym = '.';
+                    } else {
+                        sym = '.';
+                    }
+                    cell = String.format("[%c]", sym);
                 }
+                System.out.printf("%4s", cell);
             }
             System.out.println();
         }

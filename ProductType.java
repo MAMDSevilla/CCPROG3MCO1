@@ -1,7 +1,7 @@
 public enum ProductType {
     FRUIT("FRU", DisplayType.TABLE, true, false, false, false),
-    CEREAL("CER", DisplayType.SHELF, true, false, false, false),
-    NOODLES("NDL", DisplayType.SHELF, true, false, false, false),
+    CEREAL("CER", DisplayType.TABLE, true, false, false, false),
+    NOODLES("NDL", DisplayType.TABLE, true, false, false, false),
     SNACKS("SNK", DisplayType.SHELF, true, false, false, false),
     CANNED_GOODS("CAN", DisplayType.SHELF, true, false, false, false),
     CONDIMENTS("CON", DisplayType.SHELF, true, false, false, false),
@@ -10,20 +10,7 @@ public enum ProductType {
     ALCOHOL("ALC", DisplayType.SHELF, false, true, true, true),
     CHICKEN("CHK", DisplayType.CHILLED_COUNTER, true, false, false, false),
     BEEF("BEF", DisplayType.CHILLED_COUNTER, true, false, false, false),
-    SEAFOOD("SEA", DisplayType.CHILLED_COUNTER, true, false, false, false),
-    VEGETABLE("VEG", DisplayType.TABLE, true, false, false, false),
-    MILK("MLK", DisplayType.REFRIGERATOR, false, true, false, false),
-    FROZEN_FOOD("FRZ", DisplayType.REFRIGERATOR, true, false, false, false),
-    CHEESE("CHS", DisplayType.REFRIGERATOR, true, false, false, false),
-    BREAD("BRD", DisplayType.TABLE, true, false, false, false),
-    CLEANING_AGENTS("CLN", DisplayType.SHELF, false, false, false, false),
-    HOME_ESSENTIALS("HOM", DisplayType.SHELF, false, false, false, false),
-    HAIR_CARE("HAR", DisplayType.SHELF, false, false, false, false),
-    BODY_CARE("BOD", DisplayType.SHELF, false, false, false, false),
-    DENTAL_CARE("DEN", DisplayType.SHELF, false, false, false, false),
-    CLOTHES("CLO", DisplayType.SHELF, false, false, false, false),
-    STATIONERY("STA", DisplayType.SHELF, false, false, false, false),
-    PET_FOOD("PET", DisplayType.SHELF, true, false, false, false);
+    SEAFOOD("SEA", DisplayType.CHILLED_COUNTER, true, false, false, false);
 
     private final String prefix;
     private final DisplayType displayType;

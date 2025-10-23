@@ -14,18 +14,21 @@ public class Driver {
                 System.out.println("Invalid name. Please enter a non-empty name.");
             }
             int age;
-            while (true) {
-                System.out.print("Enter age: ");
-                try {
-                    age = Integer.parseInt(scanner.nextLine().trim());
-                    if (age > 0) {
-                        break;
+                while (true) {
+                    System.out.print("Enter age: ");
+                    String input = scanner.nextLine().trim();
+                    if (input.isEmpty()) {
+                        System.out.println("Invalid age. Please enter a positive integer.");
+                        continue;
                     }
-                    System.out.println("Invalid age. Please enter a positive integer.");
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid age. Please enter a valid integer.");
+                    try {
+                        age = Integer.parseInt(input);
+                        if (age > 0) break;
+                        System.out.println("Invalid age. Please enter a positive integer.");
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid age. Please enter a valid integer.");
+                    }
                 }
-            }
             Shopper shopper = new Shopper(name, age);
             Map map = new Map();
             map.spawnShopper(shopper);
