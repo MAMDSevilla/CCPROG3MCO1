@@ -1,3 +1,4 @@
+
 // Map.java
 import java.util.*;
 
@@ -50,17 +51,37 @@ public class Map {
     private void initializeMap() {
         for (int r = 0; r < ROWS; r++) for (int c = 0; c < COLS; c++) tiles[r][c] = new Tile();
 
-        for (int c = 0; c < COLS; c++) { tiles[0][c] = new Tile(Tile.Type.WALL, null); tiles[ROWS-1][c] = new Tile(Tile.Type.WALL, null); }
-        for (int r = 0; r < ROWS; r++) { tiles[r][0] = new Tile(Tile.Type.WALL, null); tiles[r][COLS-1] = new Tile(Tile.Type.WALL, null); }
+        for (int c = 0; c < COLS; c++) { 
+            tiles[0][c] = new Tile(Tile.Type.WALL, null); 
+            tiles[ROWS-1][c] = new Tile(Tile.Type.WALL, null); 
+        }
+
+        for (int r = 0; r < ROWS; r++) { 
+            tiles[r][0] = new Tile(Tile.Type.WALL, null); 
+            tiles[r][COLS-1] = new Tile(Tile.Type.WALL, null); 
+        }
 
         tiles[21][11] = new Tile(Tile.Type.SERVICE, new EntranceService());
-        tiles[21][10] = new Tile(Tile.Type.SERVICE, new ExitService());
+        tiles[21][9] = new Tile(Tile.Type.SERVICE, new ExitService());
         tiles[20][1] = new Tile(Tile.Type.SERVICE, new BasketStation());
         tiles[20][20] = new Tile(Tile.Type.SERVICE, new CartStation());
         tiles[15][8] = new Tile(Tile.Type.SERVICE, new ProductSearchService());
         tiles[15][13] = new Tile(Tile.Type.SERVICE, new ProductSearchService());
 
-        for (int c = 0; c < 8; c++) tiles[18][c] = new Tile(Tile.Type.SERVICE, new CheckoutService());
+        int[] cols = {2,4,6,8,13,15,17,19};
+        for (int col : cols) {
+            tiles[18][col] = new Tile(Tile.Type.SERVICE, new CheckoutService());
+        }
+
+        // Add walls in row 18 at specified columns
+        int[] wallCols = {1,3,5,7,10,11,14,16,18,20};
+        for (int col : wallCols) {
+            tiles[18][col] = new Tile(Tile.Type.WALL, null);
+        }
+
+        // Add walls in row 17 at columns 10 and 11
+        tiles[17][10] = new Tile(Tile.Type.WALL, null);
+        tiles[17][11] = new Tile(Tile.Type.WALL, null);
 
         // Tables for MCO1
         createTableRow(4, 7, 17, "GF, Aisle 3, Table 1 ", ProductType.FRUIT);
@@ -78,39 +99,97 @@ public class Map {
             }
         }
 
+        // Additional shelves in rows 4-7 and 10-13, columns 2,3,6,7,14,15,18,19
+        // Row 4-7: col 2,3 alcohol; col 6,7 softdrinks; col 14,15 cereal; col 18,19 canned_goods
+        for (int r = 4; r <= 7; r++) {
+            tiles[r][2] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 4-7, Aisle 2, Shelf " + (r - 3)));
+            tiles[r][3] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 4-7, Aisle 2, Shelf " + (r - 3)));
+            tiles[r][6] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 4-7, Aisle 3, Shelf " + (r - 3)));
+            tiles[r][7] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 4-7, Aisle 3, Shelf " + (r - 3)));
+            tiles[r][14] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 4-7, Aisle 6, Shelf " + (r - 3)));
+            tiles[r][15] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 4-7, Aisle 6, Shelf " + (r - 3)));
+            tiles[r][18] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 4-7, Aisle 7, Shelf " + (r - 3)));
+            tiles[r][19] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 4-7, Aisle 7, Shelf " + (r - 3)));
+        }
+        // Row 10-13: col 2,3 condiments; col 6,7 juice; col 14,15 noodles; col 18,19 snacks
+        for (int r = 10; r <= 13; r++) {
+            tiles[r][2] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 10-13, Aisle 2, Shelf " + (r - 9)));
+            tiles[r][3] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 10-13, Aisle 2, Shelf " + (r - 9)));
+            tiles[r][6] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 10-13, Aisle 3, Shelf " + (r - 9)));
+            tiles[r][7] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 10-13, Aisle 3, Shelf " + (r - 9)));
+            tiles[r][14] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 10-13, Aisle 6, Shelf " + (r - 9)));
+            tiles[r][15] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 10-13, Aisle 6, Shelf " + (r - 9)));
+            tiles[r][18] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 10-13, Aisle 7, Shelf " + (r - 9)));
+            tiles[r][19] = new Tile(Tile.Type.DISPLAY, new Shelf("GF, Row 10-13, Aisle 7, Shelf " + (r - 9)));
+        }
+
         // Chilled Counters for MCO1
-        createChilledCounterRow(14, 16, 1, "GF, Wall 1, Chilled Counter ", ProductType.CHICKEN);
+        int counterNum = 1;
+        for (int c = 1; c <= 6; c++) {
+            tiles[1][c] = new Tile(Tile.Type.DISPLAY, new ChilledCounter("GF, Wall 1, Chilled Counter " + counterNum));
+            counterNum++;
+        }
+        for (int c = 8; c <= 13; c++) {
+            tiles[1][c] = new Tile(Tile.Type.DISPLAY, new ChilledCounter("GF, Wall 1, Chilled Counter " + counterNum));
+            counterNum++;
+        }
+        for (int c = 15; c <= 20; c++) {
+            tiles[1][c] = new Tile(Tile.Type.DISPLAY, new ChilledCounter("GF, Wall 1, Chilled Counter " + counterNum));
+            counterNum++;
+        }
     }
 
     private void createShelfRow(int start, int end, int col, String base, ProductType type) {
-        for (int r = start, i = 1; r <= end; r++, i++) tiles[r][col] = new Tile(Tile.Type.DISPLAY, new Shelf(base + i));
+        for (int r = start, i = 1; r <= end; r++, i++) {
+            tiles[r][col] = new Tile(Tile.Type.DISPLAY, new Shelf(base + i));
+        }
     }
     private void createTableRow(int start, int end, int col, String base, ProductType type) {
-        for (int r = start, i = 1; r <= end; r++, i++) tiles[r][col] = new Tile(Tile.Type.DISPLAY, new Table(base + i));
+        for (int r = start, i = 1; r <= end; r++, i++) {
+            tiles[r][col] = new Tile(Tile.Type.DISPLAY, new Table(base + i));
+        }
     }
     private void createRefrigeratorRow(int start, int end, int col, String base, ProductType type) {
-        for (int r = start, i = 1; r <= end; r++, i++) tiles[r][col] = new Tile(Tile.Type.DISPLAY, new Refrigerator(base + i));
+        for (int r = start, i = 1; r <= end; r++, i++) {
+            tiles[r][col] = new Tile(Tile.Type.DISPLAY, new Refrigerator(base + i));
+        }
     }
     private void createChilledCounterRow(int start, int end, int col, String base, ProductType type) {
-        for (int r = start, i = 1; r <= end; r++, i++) tiles[r][col] = new Tile(Tile.Type.DISPLAY, new ChilledCounter(base + i));
+        for (int r = start, i = 1; r <= end; r++, i++) {
+            tiles[r][col] = new Tile(Tile.Type.DISPLAY, new ChilledCounter(base + i));
+        }
     }
 
     private void stockDisplays() {
-        for (int r = 0; r < ROWS; r++) for (int c = 0; c < COLS; c++) {
-            Tile t = tiles[r][c];
-            if (t.getType() == Tile.Type.DISPLAY) {
-                Display d = (Display) t.getAmenity();
-                ProductType type = getProductTypeForAddress(d.getAddress());
-                if (type == null) continue;
-                int max = d.getDisplayType().getNumTiers() * d.getDisplayType().getCapacityPerTier();
-                int num = random.nextInt(max - 1) + 1;
-                for (int i = 0; i < num; i++) {
-                    String name = productNames.get(type)[random.nextInt(productNames.get(type).length)];
-                    double[] range = priceRanges.get(type);
-                    double price = range[0] + random.nextDouble() * (range[1] - range[0]);
-                    Product p = new Product(type, name, price);
-                    int tier = random.nextInt(d.getDisplayType().getNumTiers());
-                    while (!d.addProduct(p, tier)) tier = random.nextInt(d.getDisplayType().getNumTiers());
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c < COLS; c++) {
+                Tile t = tiles[r][c];
+                if (t.getType() == Tile.Type.DISPLAY) {
+                    Display d = (Display) t.getAmenity();
+                    ProductType type = getProductTypeForAddress(d.getAddress());
+                    if (type == null) continue;
+                    int max = d.getDisplayType().getNumTiers() * d.getDisplayType().getCapacityPerTier();
+                    int num = random.nextInt(max - 1) + 1;
+                    List<List<Product>> tiers = d.getTiers();
+                    int capacityPerTier = d.getDisplayType().getCapacityPerTier();
+                    for (int i = 0; i < num; i++) {
+                        String name = productNames.get(type)[random.nextInt(productNames.get(type).length)];
+                        double[] range = priceRanges.get(type);
+                        double price = range[0] + random.nextDouble() * (range[1] - range[0]);
+                        Product p = new Product(type, name, price);
+                        
+                        // Find available tiers
+                        List<Integer> availableTiers = new ArrayList<>();
+                        for (int tier = 0; tier < tiers.size(); tier++) {
+                            if (tiers.get(tier).size() < capacityPerTier) {
+                                availableTiers.add(tier);
+                            }
+                        }
+                        if (!availableTiers.isEmpty()) {
+                            int tier = availableTiers.get(random.nextInt(availableTiers.size()));
+                            d.addProduct(p, tier);
+                        }
+                    }
                 }
             }
         }
@@ -123,13 +202,24 @@ public class Map {
         if (address.contains("Aisle 1") && address.contains("Shelf ")) return ProductType.ALCOHOL;
         if (address.contains("Aisle 5") && address.contains("Shelf ")) return ProductType.CANNED_GOODS;
         if (address.contains("Aisle 4") && address.contains("Shelf ")) return ProductType.CONDIMENTS;
-        if (address.contains("Chilled Counter 1")) return ProductType.CHICKEN;
-        if (address.contains("Chilled Counter 2")) return ProductType.BEEF;
-        if (address.contains("Chilled Counter 3")) return ProductType.SEAFOOD;
+        if (address.contains("Row 4-7") && address.contains("Aisle 2") && address.contains("Shelf ")) return ProductType.ALCOHOL;
+        if (address.contains("Row 4-7") && address.contains("Aisle 3") && address.contains("Shelf ")) return ProductType.SOFT_DRINK;
+        if (address.contains("Row 4-7") && address.contains("Aisle 6") && address.contains("Shelf ")) return ProductType.CEREAL;
+        if (address.contains("Row 4-7") && address.contains("Aisle 7") && address.contains("Shelf ")) return ProductType.CANNED_GOODS;
+        if (address.contains("Row 10-13") && address.contains("Aisle 2") && address.contains("Shelf ")) return ProductType.CONDIMENTS;
+        if (address.contains("Row 10-13") && address.contains("Aisle 3") && address.contains("Shelf ")) return ProductType.JUICE;
+        if (address.contains("Row 10-13") && address.contains("Aisle 6") && address.contains("Shelf ")) return ProductType.NOODLES;
+        if (address.contains("Row 10-13") && address.contains("Aisle 7") && address.contains("Shelf ")) return ProductType.SNACKS;
+        if (address.contains("Chilled Counter ")) {
+            int counterNum = Integer.parseInt(address.substring(address.lastIndexOf(" ") + 1));
+            if (counterNum >= 1 && counterNum <= 6) return ProductType.CHICKEN;
+            if (counterNum >= 7 && counterNum <= 12) return ProductType.BEEF;
+            if (counterNum >= 13 && counterNum <= 18) return ProductType.SEAFOOD;
+        }
         return null;
     }
 
-    public void spawnShopper(Shopper s) { shopper = s; shopper.setPosition(21, 0); }
+    public void spawnShopper(Shopper s) { shopper = s; shopper.setPosition(21, 11); shopper.setFacing(Direction.NORTH); }
 
     public void printMap() {
         //System.out.println();
@@ -144,15 +234,15 @@ public class Map {
         System.out.println();
 
         // Print column numbers
-        System.out.print("   ");
+        System.out.print("    ");
         for (int c = 0; c < COLS; c++) {
-            System.out.printf("%4d", c);
+            System.out.printf("%3d", c);
         }
         System.out.println();
 
         for (int r = 0; r < ROWS; r++) {
             // Print row number
-            System.out.printf("%4d", r);
+            System.out.printf("%3d", r);
             for (int c = 0; c < COLS; c++) {
                 String cell;
                 if (r == shopper.getRow() && c == shopper.getCol()) {
@@ -161,7 +251,7 @@ public class Map {
                     else if (shopper.getFacing() == Direction.SOUTH) facingSym = 'v';
                     else if (shopper.getFacing() == Direction.EAST) facingSym = '>';
                     else facingSym = '<';
-                    cell = String.format("[%c]", facingSym);
+                    cell = String.valueOf(facingSym);
                 } else {
                     Tile t = tiles[r][c];
                     char sym;
@@ -186,9 +276,9 @@ public class Map {
                     } else {
                         sym = '.';
                     }
-                    cell = String.format("[%c]", sym);
+                    cell = String.valueOf(sym);
                 }
-                System.out.printf("%4s", cell);
+                System.out.printf("%3s", cell);
             }
             System.out.println();
         }

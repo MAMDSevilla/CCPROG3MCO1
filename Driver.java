@@ -31,7 +31,7 @@ public class Driver {
                 }
             Shopper shopper = new Shopper(name, age);
             Map map = new Map();
-            map.spawnShopper(shopper);
+            map.spawnSh opper(shopper);
             while (map.isRunning()) {
                 map.printMap();
                 System.out.println();
