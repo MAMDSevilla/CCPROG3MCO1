@@ -33,11 +33,9 @@ public class Display {
     // ===== Product Management =====
     public boolean addProduct(Product p) {
         if (products.size() >= capacity) {
-            System.out.println("Display " + id + " is full.");
             return false;
         }
         if (!isCompatible(p.getType())) {
-            System.out.println("Product type not compatible with this display.");
             return false;
         }
         products.add(p);
@@ -55,6 +53,9 @@ public class Display {
     }
 
     public boolean isCompatible(ProductType type) {
+        if (this.type == DispType.SHELF) {
+            return true;
+        }
         return type.getCompatibleDisplay() == this.type;
     }
 

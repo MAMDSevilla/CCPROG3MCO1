@@ -16,7 +16,6 @@ public class Equipment {
             contents.add(p);
             return true;
         }
-        System.out.println(eqType + " is full!");
         return false;
     }
 
