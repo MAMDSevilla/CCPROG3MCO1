@@ -113,19 +113,19 @@ public class Display {
             return;
         }
 
-        System.out.println("Products on Display " + id + ":");
+        System.out.println("Available Products on Display " + id + " (Serial: Name - Price):");
         for (Product p : products) {
-            System.out.println("- " + p.getName() + " (" + p.getSerial() + ") (₱" + p.getPrice() + ")");
+            System.out.println("Serial: " + p.getSerial() + " | Name: " + p.getName() + " | Price: ₱" + String.format("%.2f", p.getPrice()));
         }
 
-        System.out.println("Type the product serial number to pick up, or press Enter to cancel:");
+        System.out.println("Enter the full serial number (e.g., FRU00001) to pick up, or press Enter to cancel:");
         String choice = new java.util.Scanner(System.in).nextLine().trim();
         if (!choice.isEmpty()) {
             Product chosen = removeProduct(choice);
             if (chosen != null) {
                 System.out.println("You picked up " + chosen.getName() + "!");
             } else {
-                System.out.println("No product found with that serial.");
+                System.out.println("No product found with serial '" + choice + "'. Ensure it's 7 characters (e.g., FRU00001).");
             }
         }
     }

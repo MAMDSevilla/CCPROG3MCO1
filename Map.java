@@ -241,12 +241,13 @@ public class Map {
                         return;
                     }
                 }
+                System.out.println("Enter the full serial code (e.g., FRU00001) from the list above to pick up:");
                 while (true) {
-                    System.out.print("Enter serial code: ");
+                    System.out.print("Serial: ");
                     String serial = scanner.nextLine().trim();
                     Product p = d.removeProduct(serial, tier);
                     if (p == null) {
-                        System.out.println("Not found. Please try again.");
+                        System.out.println("Serial '" + serial + "' not found. Verify the code (must be 7 characters, like CHK00001) and try again.");
                         continue;
                     }
                     if (!shopper.canTakeProduct(p)) {
@@ -269,12 +270,13 @@ public class Map {
                     return;
                 }
                 for (Product p : prods) System.out.println(p.getSerialCode() + " " + p.getName() + " ₱" + p.getPrice());
+                System.out.println("Enter the full serial code (e.g., FRU00001) from your items to return:");
                 while (true) {
-                    System.out.print("Enter serial code: ");
+                    System.out.print("Serial: ");
                     String serial = scanner.nextLine().trim();
                     Product p = shopper.removeProduct(serial);
                     if (p == null) {
-                        System.out.println("Not found. Please try again.");
+                        System.out.println("Serial '" + serial + "' not found in your items. Verify the code (must be 7 characters, like CHK00001) and try again.");
                         continue;
                     }
                     if (!p.getType().getDisplayType().equals(d.getDisplayType())) {
