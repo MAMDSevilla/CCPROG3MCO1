@@ -170,6 +170,30 @@ public class StoreMap {
      * Prints the map to the console, showing all tiles and the shopper’s position.
      */
     public void render() {
+        // Legend
+        System.out.println("\n=== LEGEND ===");
+        System.out.println("# : Wall            | ◌ : Floor         | θ : Checkout Counter  | ○ : Shopper");
+        System.out.println("▽ : Basket Station  | ▯ : Cart Station  | M : ATM               | P : Product Search");
+        System.out.println("C : Chilled Counter | S : Shelf         | T : Table             | E : Entrance  | X : Exit");
+
+        // Current balance and grocery total
+        if (shopper != null) {
+            double balance = shopper.getWallet().getBalance();
+            double groceryTotal = 0.0;
+            // Sum from held products
+            for (Product p : shopper.getHeldProducts()) {
+                groceryTotal += p.getPrice();
+            }
+            // Sum from equipment
+            if (shopper.getEquipment() != null) {
+                for (Product p : shopper.getEquipment().getContents()) {
+                    groceryTotal += p.getPrice();
+                }
+            }
+            System.out.printf("\nCurrent Wallet Balance: ₱%.2f%n", balance);
+            System.out.printf("Current Grocery Total: ₱%.2f%n", groceryTotal);
+        }
+
         System.out.println("\n===== SUPERMARKET MAP (Ground Floor) =====");
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
@@ -184,7 +208,7 @@ public class StoreMap {
             }
             System.out.println();
         }
-        System.out.println("==========================================\n");
+        System.out.println("==========================================");
     }
 
     // =============================================================

@@ -68,7 +68,7 @@ public class Shopper {
     // ===== Product Interaction =====
     public boolean pickProduct(Display d, String serial) {
         Product chosen = null;
-        for (Product p : d.listProducts()) {
+        for (Product p : d.getProducts()) {
             if (p.getSerial().equals(serial)) {
                 chosen = p;
                 break;
