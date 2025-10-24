@@ -172,8 +172,8 @@ public class StoreMap {
         System.out.println("\n=== LEGEND ===");
         System.out.println("# : Wall            | ◌ : Floor         | θ : Checkout Counter  | ○ : Shopper");
         System.out.println("▽ : Basket Station  | ▯ : Cart Station  | M : ATM               | P : Product Search");
-        System.out.println("C : Chilled Counter | S : Shelf         | T : Table             | E : Entrance  | X : Exit");
-        System.out.println("\nMovement: W A S D   | Look: I J K L     | Interact: Space Bar   | View: V       | Quit: Q ");
+        System.out.println("C : Chilled Counter | S : Shelf         | T : Table             | E : Entrance      | X : Exit");
+        System.out.println("\nMovement: W A S D   | Look: I J K L     | Interact: Space Bar   | V: View         | Q: Quit");
 
         // Current balance and grocery total
         if (shopper != null) {
