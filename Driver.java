@@ -26,7 +26,7 @@ public class Driver {
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
-        System.out.println("====================================");
+        System.out.println("\n====================================");
         System.out.println("   WELCOME TO THE SUPERMARKET SIM   ");
         System.out.println("====================================");
 

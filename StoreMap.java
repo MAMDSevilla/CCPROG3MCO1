@@ -117,8 +117,6 @@ public class StoreMap {
                 }
             }
         }
-
-        System.out.println("Ground Floor layout (22x22) initialized based on map layout.");
     }
 
     // =============================================================
@@ -191,7 +189,7 @@ public class StoreMap {
                 }
             }
             System.out.printf("\nCurrent Wallet Balance: ₱%.2f%n", balance);
-            System.out.printf("Current Grocery Total: ₱%.2f%n", groceryTotal);
+            System.out.printf("Current Grocery Total: ₱%.2f \t\tCurrent Facing Direction: %s%n", groceryTotal, shopper.getFacing());
         }
 
         System.out.println("\n===== SUPERMARKET MAP (Ground Floor) =====");
