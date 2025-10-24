@@ -20,14 +20,7 @@ public class UserInput {
      */
     public void start() {
         boolean running = true;
-        System.out.println("\n===== SUPERMARKET SIMULATION CONTROLS =====");
-        System.out.println("Movement: W A S D");
-        System.out.println("Look: I J K L");
-        System.out.println("Interact: Space Bar");
-        System.out.println("View: V");
-        System.out.println("Quit: Q");
-        System.out.println("==========================================\n");
-
+        
         while (running) {
             map.render();
             System.out.print("Command: ");
