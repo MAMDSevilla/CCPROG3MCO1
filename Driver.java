@@ -1,57 +1,80 @@
 import java.util.Scanner;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+/**
+ * Entry point for the Supermarket Simulation.
+ * Initializes the world and starts the interactive loop.
+ */
 
+ /*
+    IMPORTANT:
+    Run these commands =
+    *If on CMD: chcp 65001
+                java -Dfile.encoding=UTF-8 -cp . Driver
+    *If on PowerShell: [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+                       java "-Dfile.encoding=UTF-8" -cp . Driver
+  */
 public class Driver {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        
+         // === Force UTF-8 globally ===
+        System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+        System.setErr(new PrintStream(System.err, true, StandardCharsets.UTF_8));
+        System.setProperty("file.encoding", "UTF-8");
+
+        // init
         Scanner scanner = new Scanner(System.in);
-        while (true) {
-            String name;
-            while (true) {
-                System.out.print("Enter name: ");
-                name = scanner.nextLine().trim();
-                if (!name.isEmpty()) {
-                    break;
-                }
-                System.out.println("Invalid name. Please enter a non-empty name.");
-            }
+        boolean running = true;
+
+        System.out.println("====================================");
+        System.out.println("   WELCOME TO THE SUPERMARKET SIM   ");
+        System.out.println("====================================");
+
+        while (running) {
+            // --- Shopper setup ---
+            System.out.print("Enter your name: ");
+            String name = scanner.nextLine().trim();
+
+            System.out.print("Enter your age: ");
             int age;
-            while (true) {
-                System.out.print("Enter age: ");
-                try {
-                    age = Integer.parseInt(scanner.nextLine().trim());
-                    if (age > 0) {
-                        break;
-                    }
-                    System.out.println("Invalid age. Please enter a positive integer.");
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid age. Please enter a valid integer.");
-                }
+            try {
+                age = Integer.parseInt(scanner.nextLine().trim());
+            } catch (Exception e) {
+                System.out.println("Invalid input. Defaulting age to 25.");
+                age = 25;
             }
-            Shopper shopper = new Shopper(name, age);
-            Map map = new Map();
-            map.spawnShopper(shopper);
-            while (map.isRunning()) {
-                map.printMap();
-                System.out.println("Command (w a s d move, i j k l face, space interact, v view, q quit): ");
-                String command = scanner.nextLine();
-                if (command.isEmpty()) continue;
-                char ch = command.charAt(0);
-                switch (ch) {
-                    case 'w': map.moveShopper(Direction.NORTH); break;
-                    case 's': map.moveShopper(Direction.SOUTH); break;
-                    case 'a': map.moveShopper(Direction.WEST); break;
-                    case 'd': map.moveShopper(Direction.EAST); break;
-                    case 'i': shopper.setFacing(Direction.NORTH); break;
-                    case 'k': shopper.setFacing(Direction.SOUTH); break;
-                    case 'j': shopper.setFacing(Direction.WEST); break;
-                    case 'l': shopper.setFacing(Direction.EAST); break;
-                    case ' ': map.interactFront(); break;
-                    case 'v': map.viewChosen(); break;
-                    case 'q': map.setRunning(false); break;
-                }
+
+            System.out.print("Enter starting wallet balance (₱): ");
+            double balance;
+            try {
+                balance = Double.parseDouble(scanner.nextLine().trim());
+            } catch (Exception e) {
+                System.out.println("Invalid input. Defaulting ₱500.00.");
+                balance = 500.00;
             }
-            System.out.println("Restart? y/n");
-            if (!scanner.nextLine().equals("y")) break;
+
+            // --- Initialize entities ---
+            Shopper shopper = new Shopper(name, age, balance);
+            StoreMap map = new StoreMap();
+            map.initializeLayout();
+            map.setShopper(shopper);
+            shopper.setPosition(21, 11);
+
+            System.out.printf("\nShopper %s spawned at entrance! (₱%.2f)\n",
+                    shopper.getName(), shopper.getWallet().getBalance());
+
+            // --- Start game loop ---
+            UserInput ui = new UserInput(map, shopper);
+            ui.start();
+
+            // --- Restart option ---
+            System.out.print("\nWould you like to restart? (y/n): ");
+            if (!scanner.nextLine().trim().equalsIgnoreCase("y")) {
+                running = false;
+            }
         }
+
+        System.out.println("\nThanks for visiting the Supermarket Simulation!");
         scanner.close();
     }
 }

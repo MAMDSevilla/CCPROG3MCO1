@@ -1,58 +1,52 @@
+import java.util.concurrent.atomic.AtomicInteger;
+
 public enum ProductType {
-    FRUIT("FRU", DisplayType.TABLE, true, false, false, false),
-    CEREAL("CER", DisplayType.SHELF, true, false, false, false),
-    NOODLES("NDL", DisplayType.SHELF, true, false, false, false),
-    SNACKS("SNK", DisplayType.SHELF, true, false, false, false),
-    CANNED_GOODS("CAN", DisplayType.SHELF, true, false, false, false),
-    CONDIMENTS("CON", DisplayType.SHELF, true, false, false, false),
-    SOFT_DRINK("SFT", DisplayType.SHELF, false, true, false, false),
-    JUICE("JUC", DisplayType.SHELF, false, true, false, false),
-    ALCOHOL("ALC", DisplayType.SHELF, false, true, true, true),
-    CHICKEN("CHK", DisplayType.CHILLED_COUNTER, true, false, false, false),
-    BEEF("BEF", DisplayType.CHILLED_COUNTER, true, false, false, false),
-    SEAFOOD("SEA", DisplayType.CHILLED_COUNTER, true, false, false, false),
-    VEGETABLE("VEG", DisplayType.TABLE, true, false, false, false),
-    MILK("MLK", DisplayType.REFRIGERATOR, false, true, false, false),
-    FROZEN_FOOD("FRZ", DisplayType.REFRIGERATOR, true, false, false, false),
-    CHEESE("CHS", DisplayType.REFRIGERATOR, true, false, false, false),
-    BREAD("BRD", DisplayType.TABLE, true, false, false, false),
-    CLEANING_AGENTS("CLN", DisplayType.SHELF, false, false, false, false),
-    HOME_ESSENTIALS("HOM", DisplayType.SHELF, false, false, false, false),
-    HAIR_CARE("HAR", DisplayType.SHELF, false, false, false, false),
-    BODY_CARE("BOD", DisplayType.SHELF, false, false, false, false),
-    DENTAL_CARE("DEN", DisplayType.SHELF, false, false, false, false),
-    CLOTHES("CLO", DisplayType.SHELF, false, false, false, false),
-    STATIONERY("STA", DisplayType.SHELF, false, false, false, false),
-    PET_FOOD("PET", DisplayType.SHELF, true, false, false, false);
+    FRUIT("FRU", DispType.TABLE),
+    VEGETABLE("VEG", DispType.TABLE),
+    MILK("MLK", DispType.REFRIGERATOR),
+    FROZEN_FOOD("FRZ", DispType.REFRIGERATOR),
+    CHEESE("CHS", DispType.REFRIGERATOR),
+    CHICKEN("CHK", DispType.CHILLED_COUNTER),
+    BEEF("BEF", DispType.CHILLED_COUNTER),
+    SEAFOOD("SEA", DispType.CHILLED_COUNTER),
+    BREAD("BRD", DispType.TABLE),
+    CEREAL("CER", DispType.SHELF),
+    NOODLES("NDL", DispType.SHELF),
+    SNACKS("SNK", DispType.SHELF),
+    CANNED_GOODS("CAN", DispType.SHELF),
+    CONDIMENTS("CON", DispType.SHELF),
+    EGGS("EGG", DispType.TABLE),
+    SOFT_DRINK("SFT", DispType.SHELF),
+    JUICE("JUC", DispType.SHELF),
+    ALCOHOL("ALC", DispType.SHELF),
+    CLEANING_AGENTS("CLE", DispType.SHELF),
+    HOME_ESSENTIALS("HOM", DispType.SHELF),
+    HAIR_CARE("HAR", DispType.SHELF),
+    BODY_CARE("BOD", DispType.SHELF),
+    DENTAL_CARE("DEN", DispType.SHELF),
+    CLOTHES("CLO", DispType.SHELF),
+    STATIONERY("STN", DispType.SHELF),
+    PET_FOOD("PET", DispType.SHELF);
 
-    private final String prefix;
-    private final DisplayType displayType;
-    private final boolean isFood;
-    private final boolean isBeverage;
-    private final boolean restrictedForMinors;
-    private final boolean noSeniorDiscount;
+    private final String code;
+    private final DispType compatibleDisplay;
+    private final AtomicInteger counter = new AtomicInteger(1);
 
-    ProductType(String prefix, DisplayType displayType, boolean isFood, boolean isBeverage, boolean restrictedForMinors, boolean noSeniorDiscount) {
-        this.prefix = prefix;
-        this.displayType = displayType;
-        this.isFood = isFood;
-        this.isBeverage = isBeverage;
-        this.restrictedForMinors = restrictedForMinors;
-        this.noSeniorDiscount = noSeniorDiscount;
+    ProductType(String code, DispType compatibleDisplay) {
+        this.code = code;
+        this.compatibleDisplay = compatibleDisplay;
     }
 
-    public String getPrefix() { return prefix; }
-    public DisplayType getDisplayType() { return displayType; }
-    public boolean isFood() { return isFood; }
-    public boolean isBeverage() { return isBeverage; }
-    public boolean isRestrictedForMinors() { return restrictedForMinors; }
-    public boolean isNoSeniorDiscount() { return noSeniorDiscount; }
+    public String getCode() {
+        return code;
+    }
 
-    public static ProductType fromPrefix(String serial) {
-        String pre = serial.substring(0, 3);
-        for (ProductType type : values()) {
-            if (type.prefix.equals(pre)) return type;
-        }
-        throw new IllegalArgumentException("Invalid serial");
+    public DispType getCompatibleDisplay() {
+        return compatibleDisplay;
+    }
+
+    public String generateSerial() {
+        int id = counter.getAndIncrement();
+        return String.format("%s%05d", code, id);
     }
 }
