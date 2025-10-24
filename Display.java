@@ -1,52 +1,97 @@
 import java.util.ArrayList;
-import java.util.List;
 
-public abstract class Display {
-    private final String address;
-    private final List<List<Product>> tiers = new ArrayList<>();
+/**
+ * Represents a display shelf, fridge, table, or counter that holds products.
+ */
+public class Display {
+    // ===== Fields =====
+    private String id;
+    private DispType type;
+    private int capacity;
+    private ArrayList<Product> products;
+    private int row = -1;
+    private int col = -1;
 
-    public Display(String address) {
-        this.address = address;
-        int n = getDisplayType().getNumTiers();
-        for (int i = 0; i < n; i++) {
-            tiers.add(new ArrayList<>(getDisplayType().getCapacityPerTier()));
+    // ===== Constructor =====
+    public Display(String id, DispType type, int capacity) {
+        this.id = id;
+        this.type = type;
+        this.capacity = capacity;
+        this.products = new ArrayList<>();
+    }
+
+    // ===== Position Handling =====
+    public void setLocation(int row, int col) {
+        this.row = row;
+        this.col = col;
+    }
+
+    public String getLocationString() {
+        return "(" + row + "," + col + ")";
+    }
+
+    // ===== Product Management =====
+    public boolean addProduct(Product p) {
+        if (products.size() >= capacity) {
+            System.out.println("Display " + id + " is full.");
+            return false;
         }
-    }
-
-    public abstract DisplayType getDisplayType();
-
-    public boolean isFull() {
-        return tiers.stream().allMatch(t -> t.size() >= getDisplayType().getCapacityPerTier());
-    }
-
-    public boolean addProduct(Product p, int tierIdx) {
-        if (!p.getType().getDisplayType().equals(getDisplayType())) return false;
-        if (tierIdx < 0 || tierIdx >= tiers.size()) return false;
-        List<Product> tier = tiers.get(tierIdx);
-        if (tier.size() >= getDisplayType().getCapacityPerTier()) return false;
-        tier.add(p);
+        if (!isCompatible(p.getType())) {
+            System.out.println("Product type not compatible with this display.");
+            return false;
+        }
+        products.add(p);
         return true;
     }
 
-    public Product removeProduct(String serial, int tierIdx) {
-        if (tierIdx < 0 || tierIdx >= tiers.size()) return null;
-        List<Product> tier = tiers.get(tierIdx);
-        for (int i = 0; i < tier.size(); i++) {
-            if (tier.get(i).getSerialCode().equals(serial)) {
-                return tier.remove(i);
+    public Product removeProduct(String serial) {
+        for (Product p : new ArrayList<>(products)) { // avoid concurrent modification
+            if (p.getSerial().equalsIgnoreCase(serial)) {
+                products.remove(p);
+                return p;
             }
         }
         return null;
     }
 
-    public List<Product> getAllProducts() {
-        return tiers.stream().flatMap(List::stream).toList();
+    public boolean isCompatible(ProductType type) {
+        return type.getCompatibleDisplay() == this.type;
     }
 
-    public boolean containsProduct(String name) {
-        return getAllProducts().stream().anyMatch(p -> p.getName().equalsIgnoreCase(name));
+    // ===== Getters =====
+    public String getId() { return id; }
+    public DispType getType() { return type; }
+    public int getCapacity() { return capacity; }
+    public ArrayList<Product> getProducts() { return products; }
+    public int getRow() { return row; }
+    public int getCol() { return col; }
+
+    // ===== Display Info =====
+    public void listProducts() {
+        if (products.isEmpty()) {
+            System.out.println("This display is empty.");
+            return;
+        }
+
+        System.out.println("Products on Display " + id + ":");
+        for (Product p : products) {
+            System.out.println("- " + p.getName() + " (₱" + p.getPrice() + ")");
+        }
+
+        System.out.println("Type the product serial number to pick up, or press Enter to cancel:");
+        String choice = new java.util.Scanner(System.in).nextLine().trim();
+        if (!choice.isEmpty()) {
+            Product chosen = removeProduct(choice);
+            if (chosen != null) {
+                System.out.println("You picked up " + chosen.getName() + "!");
+            } else {
+                System.out.println("No product found with that serial.");
+            }
+        }
     }
 
-    public String getAddress() { return address; }
-    public List<List<Product>> getTiers() { return tiers; }
+    @Override
+    public String toString() {
+        return String.format("Display[%s] (%s) - %d/%d products", id, type, products.size(), capacity);
+    }
 }
