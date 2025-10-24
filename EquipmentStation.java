@@ -20,11 +20,11 @@ public class EquipmentStation {
 
         switch (type) {
             case CART -> {
-                s.setEquipment(new Equipment("Cart", 20)); // bigger capacity
+                s.setEquipment(new Cart()); // use Cart class with updated capacity
                 System.out.println(s.getName() + " picked up a shopping cart!");
             }
             case BASKET -> {
-                s.setEquipment(new Equipment("Basket", 8)); // smaller capacity
+                s.setEquipment(new Basket()); // use Basket class with updated capacity
                 System.out.println(s.getName() + " picked up a shopping basket!");
             }
         }

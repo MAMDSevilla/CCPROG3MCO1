@@ -22,7 +22,7 @@ public class CheckoutCounter {
     public void interact(Shopper s) {
         System.out.println("\nWelcome to Checkout Counter " + id + "!");
 
-        if (s.getHeldProducts().isEmpty()) {
+        if (s.getChosenProducts().isEmpty()) {
             System.out.println("Your cart/basket is empty!");
             return;
         }
@@ -57,7 +57,7 @@ public class CheckoutCounter {
      */
     private double calculateTotal(Shopper s) {
         double sum = 0;
-        for (Product p : s.getHeldProducts()) {
+        for (Product p : s.getChosenProducts()) {
             sum += p.getPrice();
         }
         return sum;
@@ -74,7 +74,7 @@ public class CheckoutCounter {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))).append("\n");
         sb.append("-------------------------------\n");
 
-        for (Product p : s.getHeldProducts()) {
+        for (Product p : s.getChosenProducts()) {
             sb.append(String.format("%-20s ₱%.2f%n", p.getProductName(), p.getPrice()));
         }
 

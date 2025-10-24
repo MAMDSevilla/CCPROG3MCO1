@@ -1,5 +1,5 @@
 public class Basket extends Equipment {
     public Basket() {
-        super("Basket", 5);
+        super("Basket", 15);
     }
 }

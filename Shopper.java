@@ -32,7 +32,13 @@ public class Shopper {
     public ArrayList<Product> getHeldProducts() { return heldProducts; }
     public Direction getFacing() { return facing; }
     public boolean hasEquipment() { return currentEquipment != null; }
-    public ArrayList<Product> getChosenProducts() { return heldProducts; }
+    public ArrayList<Product> getChosenProducts() {
+        ArrayList<Product> allProducts = new ArrayList<>(heldProducts);
+        if (currentEquipment != null) {
+            allProducts.addAll(currentEquipment.getContents());
+        }
+        return allProducts;
+    }
     public double getTotalPrice() {
         double total = 0.0;
         for (Product p : heldProducts) {
