@@ -97,11 +97,13 @@ public class StoreMap {
                     }
                     case 'S' -> {
                         Display shelf = new Display("SHELF-" + r + "-" + c, DispType.SHELF, 20);
+                        shelf.setLocation(r, c);
                         grid[r][c].setAmenity(shelf);
                         displays.add(shelf);
                     }
                     case 'T' -> {
                         Display table = new Display("TABLE-" + r + "-" + c, DispType.TABLE, 10);
+                        table.setLocation(r, c);
                         grid[r][c].setAmenity(table);
                         displays.add(table);
                     }
@@ -115,6 +117,8 @@ public class StoreMap {
                         CheckoutCounter counter = new CheckoutCounter("CC-" + r + "-" + c, r, c);
                         grid[r][c].setAmenity(counter);
                         services.add(counter);
+                    }
+                }
             }
         }
 
@@ -135,8 +139,27 @@ public class StoreMap {
 
         // Populate specific shelves with condiment products
         populateCondimentShelves();
-    }
-        }
+
+        // Populate specific shelves with soft drink products
+        populateSoftDrinkShelves();
+
+        // Populate specific shelves with juice products
+        populateJuiceShelves();
+
+        // Populate specific shelves with fruit products
+        populateFruitShelves();
+
+        // Populate specific shelves with cereal products
+        populateCerealShelves();
+
+        // Populate specific shelves with noodle products
+        populateNoodleShelves();
+
+        // Populate specific shelves with canned goods products
+        populateCannedGoodsShelves();
+
+        // Populate specific shelves with snacks products
+        populateSnacksShelves();
     }
 
     // =============================================================
@@ -290,15 +313,161 @@ public class StoreMap {
     }
 
     /**
+     * Populates specific shelves in rows 4-7, columns 6-7 with soft drink products.
+     */
+    private void populateSoftDrinkShelves() {
+        // Find shelves in rows 4-7, columns 6-7 (0-indexed: rows 4-7, cols 6-7)
+        for (Display d : displays) {
+            if (d.getType() == DispType.SHELF && d.getRow() >= 4 && d.getRow() <= 7 && d.getCol() >= 6 && d.getCol() <= 7) {
+                // Add soft drink products to these displays
+                Product cola = new Product("Cola", ProductType.SOFT_DRINK, 25.0, 20);
+                Product soda = new Product("Soda", ProductType.SOFT_DRINK, 20.0, 20);
+                Product sparklingWater = new Product("Sparkling water", ProductType.SOFT_DRINK, 30.0, 15);
+                d.addProduct(cola);
+                d.addProduct(soda);
+                d.addProduct(sparklingWater);
+            }
+        }
+    }
+
+    /**
+     * Populates specific shelves in rows 10-13, columns 6-7 with juice products.
+     */
+    private void populateJuiceShelves() {
+        // Find shelves in rows 10-13, columns 6-7 (0-indexed: rows 10-13, cols 6-7)
+        for (Display d : displays) {
+            if (d.getType() == DispType.SHELF && d.getRow() >= 10 && d.getRow() <= 13 && d.getCol() >= 6 && d.getCol() <= 7) {
+                // Add juice products to these displays
+                Product orangeJuice = new Product("Orange", ProductType.JUICE, 45.0, 20);
+                Product pineappleJuice = new Product("Pineapple", ProductType.JUICE, 40.0, 20);
+                Product appleJuice = new Product("Apple", ProductType.JUICE, 42.0, 20);
+                d.addProduct(orangeJuice);
+                d.addProduct(pineappleJuice);
+                d.addProduct(appleJuice);
+            }
+        }
+    }
+
+    /**
+     * Populates specific tables with fruit products.
+     */
+    private void populateFruitShelves() {
+        // Find tables in rows 10-13, columns 10-11 (0-indexed: rows 10-13, cols 10-11)
+        for (Display d : displays) {
+            if (d.getType() == DispType.TABLE && d.getRow() >= 10 && d.getRow() <= 13 && d.getCol() >= 10 && d.getCol() <= 11) {
+                // Add fruit products to these displays
+                Product watermelon = new Product("Watermelon", ProductType.FRUIT, 50.0, 10);
+                Product strawberry = new Product("Strawberry", ProductType.FRUIT, 30.0, 25);
+                Product papaya = new Product("Papaya", ProductType.FRUIT, 20.0, 15);
+                d.addProduct(watermelon);
+                d.addProduct(strawberry);
+                d.addProduct(papaya);
+            }
+        }
+        // Find tables in rows 4-7, columns 10-11 (0-indexed: rows 4-7, cols 10-11)
+        for (Display d : displays) {
+            if (d.getType() == DispType.TABLE && d.getRow() >= 4 && d.getRow() <= 7 && d.getCol() >= 10 && d.getCol() <= 11) {
+                // Add fruit products to these displays
+                Product apple = new Product("Apple", ProductType.FRUIT, 15.0, 30);
+                Product orange = new Product("Orange", ProductType.FRUIT, 12.0, 30);
+                Product grapes = new Product("Grapes", ProductType.FRUIT, 50.0, 10);
+                d.addProduct(apple);
+                d.addProduct(orange);
+                d.addProduct(grapes);
+            }
+        }
+    }
+
+    /**
+     * Populates specific shelves in rows 4-7, columns 14-15 with cereal products.
+     */
+    private void populateCerealShelves() {
+        // Find shelves in rows 4-7, columns 14-15 (0-indexed: rows 4-7, cols 14-15)
+        for (Display d : displays) {
+            if (d.getType() == DispType.SHELF && d.getRow() >= 4 && d.getRow() <= 7 && d.getCol() >= 14 && d.getCol() <= 15) {
+                // Add cereal products to these displays
+                Product oatmeal = new Product("Oatmeal", ProductType.CEREAL, 80.0, 10);
+                Product barley = new Product("Barley", ProductType.CEREAL, 70.0, 10);
+                Product quinoa = new Product("Quinoa", ProductType.CEREAL, 90.0, 10);
+                d.addProduct(oatmeal);
+                d.addProduct(barley);
+                d.addProduct(quinoa);
+            }
+        }
+    }
+
+    /**
+     * Populates specific shelves in rows 10-13, columns 14-15 with noodle products.
+     */
+    private void populateNoodleShelves() {
+        // Find shelves in rows 10-13, columns 14-15 (0-indexed: rows 10-13, cols 14-15)
+        for (Display d : displays) {
+            if (d.getType() == DispType.SHELF && d.getRow() >= 10 && d.getRow() <= 13 && d.getCol() >= 14 && d.getCol() <= 15) {
+                // Add noodle products to these displays
+                Product ramen = new Product("Ramen", ProductType.NOODLES, 25.0, 25);
+                Product miswa = new Product("Miswa", ProductType.NOODLES, 20.0, 25);
+                Product instantNoodles = new Product("Instant noodles", ProductType.NOODLES, 15.0, 30);
+                d.addProduct(ramen);
+                d.addProduct(miswa);
+                d.addProduct(instantNoodles);
+            }
+        }
+    }
+
+    /**
+     * Populates specific shelves in rows 4-7, columns 18-19 with canned goods products.
+     */
+    private void populateCannedGoodsShelves() {
+        // Find shelves in rows 4-7, columns 18-19 (0-indexed: rows 4-7, cols 18-19)
+        for (Display d : displays) {
+            if (d.getType() == DispType.SHELF && d.getRow() >= 4 && d.getRow() <= 7 && d.getCol() >= 18 && d.getCol() <= 19) {
+                // Add canned goods products to these displays
+                Product tuna = new Product("Tuna", ProductType.CANNED_GOODS, 60.0, 15);
+                Product sardines = new Product("Sardines", ProductType.CANNED_GOODS, 40.0, 15);
+                Product soup = new Product("Soup", ProductType.CANNED_GOODS, 35.0, 15);
+                d.addProduct(tuna);
+                d.addProduct(sardines);
+                d.addProduct(soup);
+            }
+        }
+    }
+
+    /**
+     * Populates specific shelves in rows 10-13, columns 18-19 with snacks products.
+     */
+    private void populateSnacksShelves() {
+        // Find shelves in rows 10-13, columns 18-19 (0-indexed: rows 10-13, cols 18-19)
+        for (Display d : displays) {
+            if (d.getType() == DispType.SHELF && d.getRow() >= 10 && d.getRow() <= 13 && d.getCol() >= 18 && d.getCol() <= 19) {
+                // Add snacks products to these displays
+                Product candies = new Product("Candies", ProductType.SNACKS, 5.0, 100);
+                Product cookies = new Product("Cookies", ProductType.SNACKS, 30.0, 20);
+                Product junkFood = new Product("Junk food", ProductType.SNACKS, 10.0, 50);
+                d.addProduct(candies);
+                d.addProduct(cookies);
+                d.addProduct(junkFood);
+            }
+        }
+    }
+
+    /**
      * Populates shelf displays with products from the provided table.
      */
     private void populateShelves() {
-        // Get all shelf displays, excluding specific alcohol and condiment shelves
+        // Get all shelf displays, excluding specific alcohol, condiment, soft drink, juice, fruit, cereal, and noodle shelves
         ArrayList<Display> shelves = new ArrayList<>();
         for (Display d : displays) {
             if (d.getType() == DispType.SHELF &&
-                !((d.getRow() >= 4 && d.getRow() <= 7 && d.getCol() >= 2 && d.getCol() <= 3) ||
-                  (d.getRow() >= 10 && d.getRow() <= 13 && d.getCol() >= 2 && d.getCol() <= 3))) {
+                !((d.getRow() >= 4 && d.getRow() <= 7 && d.getCol() >= 2 && d.getCol() <= 3) ||  // alcohol
+                  (d.getRow() >= 10 && d.getRow() <= 13 && d.getCol() >= 2 && d.getCol() <= 3) ||  // condiments
+                  (d.getRow() >= 10 && d.getRow() <= 13 && d.getCol() >= 6 && d.getCol() <= 7) ||  // juice
+                  (d.getRow() >= 4 && d.getRow() <= 7 && d.getCol() >= 6 && d.getCol() <= 7) ||  // soft drink
+                  (d.getRow() >= 10 && d.getRow() <= 13 && d.getCol() >= 10 && d.getCol() <= 11) ||  // fruit (10-13,10-11)
+                  (d.getRow() >= 4 && d.getRow() <= 7 && d.getCol() >= 10 && d.getCol() <= 11) ||  // fruit (4-7,10-11)
+                  (d.getRow() >= 4 && d.getRow() <= 7 && d.getCol() >= 14 && d.getCol() <= 15) ||  // cereal
+                  (d.getRow() >= 10 && d.getRow() <= 13 && d.getCol() >= 14 && d.getCol() <= 15) ||  // noodles
+                  (d.getRow() >= 4 && d.getRow() <= 7 && d.getCol() >= 18 && d.getCol() <= 19) ||  // canned goods
+                  (d.getRow() >= 10 && d.getRow() <= 13 && d.getCol() >= 18 && d.getCol() <= 19))) {  // snacks
                 shelves.add(d);
             }
         }
@@ -307,7 +476,7 @@ public class StoreMap {
             return; // No shelves to populate
         }
 
-        // Product data: name, type, price, stock
+        // Product data: name, type, price, stock (excluding alcohol, condiments, soft drinks, juice, fruit, and cereal as they are handled separately)
         Object[][] productData = {
             {"Thigh fillet", ProductType.CHICKEN, 150.0, 5},
             {"Breast fillet", ProductType.CHICKEN, 160.0, 5},
@@ -318,27 +487,9 @@ public class StoreMap {
             {"Tilapia", ProductType.SEAFOOD, 120.0, 5},
             {"Sugpo", ProductType.SEAFOOD, 250.0, 5},
             {"Squid", ProductType.SEAFOOD, 130.0, 5},
-            {"Beer", ProductType.ALCOHOL, 50.0, 10},
-            {"Vodka", ProductType.ALCOHOL, 300.0, 5},
-            {"Soju", ProductType.ALCOHOL, 80.0, 10},
-            {"Cola", ProductType.SOFT_DRINK, 25.0, 20},
-            {"Soda", ProductType.SOFT_DRINK, 20.0, 20},
-            {"Sparkling water", ProductType.SOFT_DRINK, 30.0, 15},
-            {"Apple", ProductType.FRUIT, 15.0, 30},
-            {"Orange", ProductType.FRUIT, 12.0, 30},
-            {"Grapes", ProductType.FRUIT, 50.0, 10},
-            {"Oatmeal", ProductType.CEREAL, 80.0, 10},
-            {"Barley", ProductType.CEREAL, 70.0, 10},
-            {"Quinoa", ProductType.CEREAL, 90.0, 10},
             {"Tuna", ProductType.CANNED_GOODS, 60.0, 15},
             {"Sardines", ProductType.CANNED_GOODS, 40.0, 15},
             {"Soup", ProductType.CANNED_GOODS, 35.0, 15},
-            {"Salt", ProductType.CONDIMENTS, 10.0, 50},
-            {"Pepper", ProductType.CONDIMENTS, 15.0, 50},
-            {"Paprika", ProductType.CONDIMENTS, 20.0, 30},
-            {"Orange", ProductType.JUICE, 45.0, 20},
-            {"Pineapple", ProductType.JUICE, 40.0, 20},
-            {"Apple", ProductType.JUICE, 42.0, 20},
             {"Ramen", ProductType.NOODLES, 25.0, 25},
             {"Miswa", ProductType.NOODLES, 20.0, 25},
             {"Instant noodles", ProductType.NOODLES, 15.0, 30},

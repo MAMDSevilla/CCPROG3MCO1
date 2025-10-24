@@ -1,10 +1,10 @@
 public class Refrigerator extends Display {
     public Refrigerator(String address) {
-        super(address);
+        super(address, DispType.REFRIGERATOR, 10);
     }
 
     @Override
-    public DisplayType getDisplayType() {
-        return DisplayType.REFRIGERATOR;
+    public DispType getDisplayType() {
+        return DispType.REFRIGERATOR;
     }
 }

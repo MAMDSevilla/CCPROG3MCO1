@@ -39,6 +39,14 @@ public class Equipment {
         return eqType;
     }
 
+    public boolean isEmpty() {
+        return contents.isEmpty();
+    }
+
+    public boolean canAdd(Product p) {
+        return contents.size() < capacity;
+    }
+
     public void clear() {
         contents.clear();
     }

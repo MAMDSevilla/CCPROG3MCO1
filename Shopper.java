@@ -31,6 +31,57 @@ public class Shopper {
     public Equipment getEquipment() { return currentEquipment; }
     public ArrayList<Product> getHeldProducts() { return heldProducts; }
     public Direction getFacing() { return facing; }
+    public boolean hasEquipment() { return currentEquipment != null; }
+    public ArrayList<Product> getChosenProducts() { return heldProducts; }
+    public double getTotalPrice() {
+        double total = 0.0;
+        for (Product p : heldProducts) {
+            total += p.getPrice();
+        }
+        if (currentEquipment != null) {
+            for (Product p : currentEquipment.getContents()) {
+                total += p.getPrice();
+            }
+        }
+        return total;
+    }
+    public double getDiscountedPrice() {
+        // For now, no discount
+        return getTotalPrice();
+    }
+    public boolean addProduct(Product p) {
+        if (currentEquipment != null) {
+            return currentEquipment.add(p);
+        } else if (heldProducts.size() < 2) {
+            heldProducts.add(p);
+            return true;
+        }
+        return false;
+    }
+    public Product removeProduct(String serial) {
+        for (Product p : heldProducts) {
+            if (p.getSerial().equals(serial)) {
+                heldProducts.remove(p);
+                return p;
+            }
+        }
+        if (currentEquipment != null) {
+            for (Product p : currentEquipment.getContents()) {
+                if (p.getSerial().equals(serial)) {
+                    currentEquipment.getContents().remove(p);
+                    return p;
+                }
+            }
+        }
+        return null;
+    }
+    public boolean canTakeProduct(Product p) {
+        if (currentEquipment != null) {
+            return currentEquipment.canAdd(p);
+        } else {
+            return heldProducts.size() < 2;
+        }
+    }
 
     // ===== Setters =====
     public void setEquipment(Equipment eq) { this.currentEquipment = eq; }

@@ -11,6 +11,7 @@ public class Display {
     private ArrayList<Product> products;
     private int row = -1;
     private int col = -1;
+    private java.util.List<java.util.List<Product>> tiers;
 
     // ===== Constructor =====
     public Display(String id, DispType type, int capacity) {
@@ -18,6 +19,12 @@ public class Display {
         this.type = type;
         this.capacity = capacity;
         this.products = new ArrayList<>();
+        this.tiers = new ArrayList<>();
+        // Assume 1 tier for simplicity, or based on type
+        int numTiers = 1; // TODO: define based on DispType
+        for (int i = 0; i < numTiers; i++) {
+            tiers.add(new ArrayList<>());
+        }
     }
 
     // ===== Position Handling =====
@@ -66,6 +73,38 @@ public class Display {
     public ArrayList<Product> getProducts() { return products; }
     public int getRow() { return row; }
     public int getCol() { return col; }
+    public String getAddress() { return id; }
+    public DispType getDisplayType() { return type; }
+    public java.util.List<java.util.List<Product>> getTiers() { return tiers; }
+    public boolean containsProduct(String name) {
+        for (Product p : products) {
+            if (p.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean addProduct(Product p, int tier) {
+        if (tier < 0 || tier >= tiers.size()) return false;
+        java.util.List<Product> tierList = tiers.get(tier);
+        if (tierList.size() >= capacity / tiers.size()) return false; // simple capacity per tier
+        if (!isCompatible(p.getType())) return false;
+        tierList.add(p);
+        products.add(p); // also add to flat list
+        return true;
+    }
+    public Product removeProduct(String serial, int tier) {
+        if (tier < 0 || tier >= tiers.size()) return null;
+        java.util.List<Product> tierList = tiers.get(tier);
+        for (Product p : new ArrayList<>(tierList)) {
+            if (p.getSerial().equalsIgnoreCase(serial)) {
+                tierList.remove(p);
+                products.remove(p);
+                return p;
+            }
+        }
+        return null;
+    }
 
     // ===== Display Info =====
     public void listProducts() {
@@ -76,7 +115,7 @@ public class Display {
 
         System.out.println("Products on Display " + id + ":");
         for (Product p : products) {
-            System.out.println("- " + p.getName() + " (₱" + p.getPrice() + ")");
+            System.out.println("- " + p.getName() + " (" + p.getSerial() + ") (₱" + p.getPrice() + ")");
         }
 
         System.out.println("Type the product serial number to pick up, or press Enter to cancel:");
