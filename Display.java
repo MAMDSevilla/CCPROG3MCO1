@@ -107,7 +107,7 @@ public class Display {
     }
 
     // ===== Display Info =====
-    public void listProducts() {
+    public void listProducts(Shopper shopper) {
         if (products.isEmpty()) {
             System.out.println("This display is empty.");
             return;
@@ -121,11 +121,10 @@ public class Display {
         System.out.println("Enter the full serial number (e.g., FRU00001) to pick up, or press Enter to cancel:");
         String choice = new java.util.Scanner(System.in).nextLine().trim();
         if (!choice.isEmpty()) {
-            Product chosen = removeProduct(choice);
-            if (chosen != null) {
-                System.out.println("You picked up " + chosen.getName() + "!");
+            if (shopper.pickProduct(this, choice)) {
+                // Success message handled in pickProduct
             } else {
-                System.out.println("No product found with serial '" + choice + "'. Ensure it's 7 characters (e.g., FRU00001).");
+                System.out.println("Failed to pick up the product with serial '" + choice + "'.");
             }
         }
     }

@@ -65,12 +65,14 @@ public class Driver {
 
             // --- Start game loop ---
             UserInput ui = new UserInput(map, shopper);
-            ui.start();
+            boolean restartFromGame = ui.start();
 
             // --- Restart option ---
-            System.out.print("\nWould you like to restart? (y/n): ");
-            if (!scanner.nextLine().trim().equalsIgnoreCase("y")) {
-                running = false;
+            if (!restartFromGame) {
+                System.out.print("\nWould you like to restart? (y/n): ");
+                if (!scanner.nextLine().trim().equalsIgnoreCase("y")) {
+                    running = false;
+                }
             }
         }
 

@@ -18,8 +18,9 @@ public class UserInput {
     /**
      * Main input loop.
      */
-    public void start() {
+    public boolean start() {
         boolean running = true;
+        boolean restartRequested = false;
         
         while (running) {
             map.render();
@@ -57,7 +58,11 @@ public class UserInput {
 
                 // --- INTERACTION ---
                 case "":
-                    interactWithFrontTile();
+                    boolean restart = interactWithFrontTile();
+                    if (restart) {
+                        running = false;
+                        restartRequested = true;
+                    }
                     break;
 
                 // --- VIEW CART ---
@@ -75,12 +80,13 @@ public class UserInput {
                     System.out.println("Invalid command. Try again!");
             }
         }
+        return restartRequested;
     }
 
     /**
      * Finds the tile in front of the shopper and interacts with its amenity if any.
      */
-    private void interactWithFrontTile() {
+    private boolean interactWithFrontTile() {
         int r = shopper.getRow();
         int c = shopper.getCol();
 
@@ -93,7 +99,7 @@ public class UserInput {
 
         if (!map.isWithinBounds(r, c)) {
             System.out.println("Can't interact outside the map!");
-            return;
+            return false;
         }
 
         TileAndIcon target = map.getGrid()[r][c];
@@ -101,25 +107,31 @@ public class UserInput {
 
         if (amenity == null) {
             System.out.println("There's nothing to interact with here.");
-            return;
+            return false;
         }
 
         // Dynamically handle different amenity types
         if (amenity instanceof Display d) {
             System.out.println("You are looking at Display: " + d.getId());
-            d.listProducts();
+            d.listProducts(shopper);
+            return false;
         } else if (amenity instanceof EquipmentStation e) {
             e.interact(shopper);
+            return false;
         } else if (amenity instanceof Accessway a) {
-            a.interact(shopper, map);
+            return a.interact(shopper, map);
         } else if (amenity instanceof ProductSearch ps) {
             ps.interact(shopper);
+            return false;
         } else if (amenity instanceof CheckoutCounter cc) {
             cc.interact(shopper);
+            return false;
         } else if (amenity instanceof ATM atm) {
             atm.interact(shopper);
+            return false;
         } else {
             System.out.println("Unknown amenity type: " + amenity.getClass().getSimpleName());
+            return false;
         }
     }
 }
