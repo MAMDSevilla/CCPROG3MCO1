@@ -1,52 +1,136 @@
 import java.util.ArrayList;
-import java.util.List;
 
-public abstract class Display {
-    private final String address;
-    private final List<List<Product>> tiers = new ArrayList<>();
+/**
+ * Represents a display shelf, fridge, table, or counter that holds products.
+ */
+public class Display {
+    // ===== Fields =====
+    private String id;
+    private DispType type;
+    private int capacity;
+    private ArrayList<Product> products;
+    private int row = -1;
+    private int col = -1;
+    private java.util.List<java.util.List<Product>> tiers;
 
-    public Display(String address) {
-        this.address = address;
-        int n = getDisplayType().getNumTiers();
-        for (int i = 0; i < n; i++) {
-            tiers.add(new ArrayList<>(getDisplayType().getCapacityPerTier()));
+    // ===== Constructor =====
+    public Display(String id, DispType type, int capacity) {
+        this.id = id;
+        this.type = type;
+        this.capacity = capacity;
+        this.products = new ArrayList<>();
+        this.tiers = new ArrayList<>();
+        // Assume 1 tier for simplicity, or based on type
+        int numTiers = 1; // TODO: define based on DispType
+        for (int i = 0; i < numTiers; i++) {
+            tiers.add(new ArrayList<>());
         }
     }
 
-    public abstract DisplayType getDisplayType();
-
-    public boolean isFull() {
-        return tiers.stream().allMatch(t -> t.size() >= getDisplayType().getCapacityPerTier());
+    // ===== Position Handling =====
+    public void setLocation(int row, int col) {
+        this.row = row;
+        this.col = col;
     }
 
-    public boolean addProduct(Product p, int tierIdx) {
-        if (!p.getType().getDisplayType().equals(getDisplayType())) return false;
-        if (tierIdx < 0 || tierIdx >= tiers.size()) return false;
-        List<Product> tier = tiers.get(tierIdx);
-        if (tier.size() >= getDisplayType().getCapacityPerTier()) return false;
-        tier.add(p);
+    public String getLocationString() {
+        return "(" + row + "," + col + ")";
+    }
+
+    // ===== Product Management =====
+    public boolean addProduct(Product p) {
+        if (products.size() >= capacity) {
+            return false;
+        }
+        if (!isCompatible(p.getType())) {
+            return false;
+        }
+        products.add(p);
         return true;
     }
 
-    public Product removeProduct(String serial, int tierIdx) {
-        if (tierIdx < 0 || tierIdx >= tiers.size()) return null;
-        List<Product> tier = tiers.get(tierIdx);
-        for (int i = 0; i < tier.size(); i++) {
-            if (tier.get(i).getSerialCode().equals(serial)) {
-                return tier.remove(i);
+    public Product removeProduct(String serial) {
+        for (Product p : new ArrayList<>(products)) { // avoid concurrent modification
+            if (p.getSerial().equalsIgnoreCase(serial)) {
+                products.remove(p);
+                return p;
             }
         }
         return null;
     }
 
-    public List<Product> getAllProducts() {
-        return tiers.stream().flatMap(List::stream).toList();
+    public boolean isCompatible(ProductType type) {
+        if (this.type == DispType.SHELF) {
+            return true;
+        }
+        return type.getCompatibleDisplay() == this.type;
     }
 
+    // ===== Getters =====
+    public String getId() { return id; }
+    public DispType getType() { return type; }
+    public int getCapacity() { return capacity; }
+    public ArrayList<Product> getProducts() { return products; }
+    public int getRow() { return row; }
+    public int getCol() { return col; }
+    public String getAddress() { return id; }
+    public DispType getDisplayType() { return type; }
+    public java.util.List<java.util.List<Product>> getTiers() { return tiers; }
     public boolean containsProduct(String name) {
-        return getAllProducts().stream().anyMatch(p -> p.getName().equalsIgnoreCase(name));
+        for (Product p : products) {
+            if (p.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean addProduct(Product p, int tier) {
+        if (tier < 0 || tier >= tiers.size()) return false;
+        java.util.List<Product> tierList = tiers.get(tier);
+        if (tierList.size() >= capacity / tiers.size()) return false; // simple capacity per tier
+        if (!isCompatible(p.getType())) return false;
+        tierList.add(p);
+        products.add(p); // also add to flat list
+        return true;
+    }
+    public Product removeProduct(String serial, int tier) {
+        if (tier < 0 || tier >= tiers.size()) return null;
+        java.util.List<Product> tierList = tiers.get(tier);
+        for (Product p : new ArrayList<>(tierList)) {
+            if (p.getSerial().equalsIgnoreCase(serial)) {
+                tierList.remove(p);
+                products.remove(p);
+                return p;
+            }
+        }
+        return null;
     }
 
-    public String getAddress() { return address; }
-    public List<List<Product>> getTiers() { return tiers; }
+    // ===== Display Info =====
+    public void listProducts(Shopper shopper) {
+        if (products.isEmpty()) {
+            System.out.println("This display is empty.");
+            return;
+        }
+
+        System.out.println("Available Products on Display " + id + " (Serial: Name - Price):");
+        for (Product p : products) {
+            System.out.println("Serial: " + p.getSerial() + " | Name: " + p.getName() + " | Price: ₱" + String.format("%.2f", p.getPrice()));
+        }
+
+        System.out.println("Enter the full serial number (e.g., FRU00001) to pick up, or press Enter to cancel:");
+        String choice = new java.util.Scanner(System.in).nextLine().trim();
+        if (!choice.isEmpty()) {
+            if (shopper.pickProduct(this, choice)) {
+                // Success message handled in pickProduct
+            } else {
+                System.out.println("Failed to pick up the product with serial '" + choice + "'.");
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Display[%s] (%s) - %d/%d products", id, type, products.size(), capacity);
+    }
 }

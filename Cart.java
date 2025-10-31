@@ -1,5 +1,5 @@
 public class Cart extends Equipment {
     public Cart() {
-        capacity = 30;
+        super("Cart", 30);
     }
 }
