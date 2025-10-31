@@ -32,7 +32,7 @@ public class Driver {
 
         while (running) {
             // --- Shopper setup ---
-            System.out.print("Enter your name: ");
+            System.out.print("\nEnter your name: ");
             String name = scanner.nextLine().trim();
 
             System.out.print("Enter your age: ");
@@ -49,8 +49,8 @@ public class Driver {
             try {
                 balance = Double.parseDouble(scanner.nextLine().trim());
             } catch (Exception e) {
-                System.out.println("Invalid input. Defaulting ₱500.00.");
-                balance = 500.00;
+                System.out.println("Invalid input. Defaulting ₱1000.00.");
+                balance = 1000.00;
             }
 
             // --- Initialize entities ---
@@ -69,7 +69,7 @@ public class Driver {
 
             // --- Restart option ---
             if (!restartFromGame) {
-                System.out.print("\nWould you like to restart? (y/n): ");
+                System.out.print("\n\nWould you like to restart? (y/n): ");
                 if (!scanner.nextLine().trim().equalsIgnoreCase("y")) {
                     running = false;
                 }
