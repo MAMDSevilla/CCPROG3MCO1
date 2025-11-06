@@ -1,25 +1,58 @@
 import java.util.ArrayList;
-import java.util.List;
 
-public abstract class Equipment {
-    protected List<Product> products = new ArrayList<>();
-    protected int capacity;
+public class Equipment {
+    private String eqType;
+    private int capacity;
+    private ArrayList<Product> contents;
 
-    public boolean addProduct(Product p) {
-        if (products.size() >= capacity) return false;
-        products.add(p);
-        return true;
+    public Equipment(String eqType, int capacity) {
+        this.eqType = eqType;
+        this.capacity = capacity;
+        this.contents = new ArrayList<>();
     }
 
-    public Product removeProduct(String serial) {
-        for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getSerialCode().equals(serial)) {
-                return products.remove(i);
-            }
+    public boolean add(Product p) {
+        if (contents.size() < capacity) {
+            contents.add(p);
+            return true;
         }
-        return null;
+        return false;
     }
 
-    public List<Product> getProducts() { return products; }
-    public boolean isEmpty() { return products.isEmpty(); }
+    public boolean remove(Product p) {
+        return contents.remove(p);
+    }
+
+    public ArrayList<Product> getContents() {
+        return contents;
+    }
+
+    public int size() {
+        return contents.size();
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public String getType() {
+        return eqType;
+    }
+
+    public boolean isEmpty() {
+        return contents.isEmpty();
+    }
+
+    public boolean canAdd(Product p) {
+        return contents.size() < capacity;
+    }
+
+    public void clear() {
+        contents.clear();
+    }
+
+    @Override
+    public String toString() {
+        return eqType + " (" + contents.size() + "/" + capacity + ")";
+    }
 }
